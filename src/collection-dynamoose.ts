@@ -43,15 +43,18 @@ export class DynamooseCollection extends BaseCollection {
     filter: PaginatedFilter,
     projection: Projection,
   ): Promise<RecordData[]> {
+    // avoid crash on list without projection
+    if (!projection.length) projection.push(...SchemaUtils.getPrimaryKeys(this.schema));
+
     // Convert filter
     const condition = ConditionBuilder.fromTree(filter.conditionTree);
 
     // Handle pagination
-    const limit = filter.page?.limit ?? 1;
+    const limit = filter.page?.limit;
     const skip = filter.page?.skip ?? 0;
 
     // Make requests satisfy the pagination settings.
-    let scanSize = skip + limit ;
+    let scanSize = limit ? skip + limit : undefined ;
     let records = [];
 
     for (const method of [this.model.query, this.model.scan]) {
