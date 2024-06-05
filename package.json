@@ -1,0 +1,21 @@
+{
+  "name": "na",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@forestadmin/agent": "1.39.1",
+    "@forestadmin/datasource-toolkit": "^1.33.0",
+    "dotenv": "^16.4.5",
+    "dynamoose": "^4.0.1",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4"
+  }
+}
