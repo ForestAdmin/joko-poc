@@ -38,6 +38,16 @@ import { createDynamooseDataSource } from './src/datasource-dynamoose';
     });
 
   agent.addDataSource(createDynamooseDataSource([merchantOffers, merchant, inAppContents]))
+  .customizeCollection('testForestAdmin-merchants', collection => {
+    collection.addOneToManyRelation('offers', 'testForestAdmin-merchantOffers', {
+      originKey: 'merchantId'
+    })
+  })
+  .customizeCollection('testForestAdmin-merchantOffers', collection => {
+    collection.addManyToOneRelation('merchant', 'testForestAdmin-merchants', {
+      foreignKey: 'merchantId'
+    })
+  })
   
   await agent
     .mountOnStandaloneServer(Number(process.env.APPLICATION_PORT))

@@ -72,8 +72,14 @@ export type Schema = {
       'useMarginOnAffiliateCommissionForPointsCalculation': boolean | null;
       'visible': boolean | null;
     };
-    nested: {};
-    flat: {};
+    nested: {
+      'merchant': Schema['testForestAdmin-merchants']['plain'] & Schema['testForestAdmin-merchants']['nested'];
+    };
+    flat: {
+      'merchant:logos': {'logoURLHighRes': string} | null;
+      'merchant:merchantId': string;
+      'merchant:name': string | null;
+    };
   };
   'testForestAdmin-merchants': {
     plain: {
