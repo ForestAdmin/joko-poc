@@ -37,17 +37,43 @@ import { createDynamooseDataSource } from './src/datasource-dynamoose';
       loggerLevel: 'Debug',
     });
 
-  agent.addDataSource(createDynamooseDataSource([merchantOffers, merchant, inAppContents]))
-  .customizeCollection('testForestAdmin-merchants', collection => {
-    collection.addOneToManyRelation('offers', 'testForestAdmin-merchantOffers', {
-      originKey: 'merchantId'
+  agent
+    .addDataSource(createDynamooseDataSource([merchantOffers, merchant, inAppContents]))
+    .customizeCollection('testForestAdmin-merchants', collection => {
+      collection
+        .addOneToManyRelation('offers', 'testForestAdmin-merchantOffers', {
+          originKey: 'merchantId'
+        })
+        .addField('nbOfOffert', {
+          columnType: 'Number',
+          dependencies: ['merchantId'],
+          getValues: async (records, context) => {
+            const rids = records.map(r => r.merchantId);
+            const offers = await context.dataSource
+              .getCollection('testForestAdmin-merchantOffers')
+              .aggregate({
+                conditionTree: {
+                  field: 'merchantId',
+                  operator: 'In',
+                  value: rids,
+                },
+              }, {
+                operation: 'Count',
+                groups: [{ field: 'merchantId' }],
+              });
+
+            return rids.map(id => {
+              const o = offers.find(o => o.group.merchantId === id);
+              return o?.value || 0;
+            });
+          }
+        });
     })
-  })
-  .customizeCollection('testForestAdmin-merchantOffers', collection => {
-    collection.addManyToOneRelation('merchant', 'testForestAdmin-merchants', {
-      foreignKey: 'merchantId'
-    })
-  })
+    .customizeCollection('testForestAdmin-merchantOffers', collection => {
+      collection.addManyToOneRelation('merchant', 'testForestAdmin-merchants', {
+        foreignKey: 'merchantId'
+      });
+    });
   
   await agent
     .mountOnStandaloneServer(Number(process.env.APPLICATION_PORT))

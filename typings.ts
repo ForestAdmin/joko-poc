@@ -79,6 +79,7 @@ export type Schema = {
       'merchant:logos': {'logoURLHighRes': string} | null;
       'merchant:merchantId': string;
       'merchant:name': string | null;
+      'merchant:nbOfOffert': number | null;
     };
   };
   'testForestAdmin-merchants': {
@@ -86,6 +87,7 @@ export type Schema = {
       'logos': {'logoURLHighRes': string} | null;
       'merchantId': string;
       'name': string | null;
+      'nbOfOffert': number | null;
     };
     nested: {};
     flat: {};
