@@ -1,7 +1,32 @@
 {
   "collections": [
     {
-      "actions": [],
+      "actions": [
+        {
+          "id": "testForestAdmin-inAppContents-1-mark-as-invisible",
+          "name": "Mark as invisible",
+          "type": "bulk",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/testForestAdmin-inAppContents/1/mark-as-invisible",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        },
+        {
+          "id": "testForestAdmin-inAppContents-0-mark-as-visible",
+          "name": "Mark as visible",
+          "type": "bulk",
+          "baseUrl": null,
+          "endpoint": "/forest/_actions/testForestAdmin-inAppContents/0/mark-as-visible",
+          "httpMethod": "POST",
+          "redirect": null,
+          "download": false,
+          "fields": [],
+          "hooks": {"load": false, "change": ["changeHook"]}
+        }
+      ],
       "fields": [
         {
           "defaultValue": null,

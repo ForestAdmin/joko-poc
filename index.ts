@@ -40,6 +40,31 @@ import { createDynamooseDataSource } from './src/datasource-dynamoose';
 
   agent
     .addDataSource(createDynamooseDataSource([merchantOffers, merchant, inAppContents]))
+    .customizeCollection('testForestAdmin-inAppContents', collection => {
+      collection
+        .addAction('Mark as visible', {
+          scope: 'Bulk',
+          execute: async (context, resBuilder) => {
+            try {
+              await context.collection.update(context.filter, { visible: true });
+              return resBuilder.success('Marked as visible');
+            } catch (err) {
+              return resBuilder.error(err.message);
+            }
+          }
+        })
+        .addAction('Mark as invisible', {
+          scope: 'Bulk',
+          execute: async (context, resBuilder) => {
+            try {
+              await context.collection.update(context.filter, { visible: false });
+              return resBuilder.success('Marked as visible');
+            } catch (err) {
+              return resBuilder.error(err.message);
+            }
+          }
+        })
+    })
     .customizeCollection('testForestAdmin-merchants', collection => {
       collection
         .addOneToManyRelation('offers', 'testForestAdmin-merchantOffers', {
