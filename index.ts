@@ -58,7 +58,7 @@ import { createDynamooseDataSource } from './src/datasource-dynamoose';
           execute: async (context, resBuilder) => {
             try {
               await context.collection.update(context.filter, { visible: false });
-              return resBuilder.success('Marked as visible');
+              return resBuilder.success('Marked as invisible');
             } catch (err) {
               return resBuilder.error(err.message);
             }
