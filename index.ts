@@ -1,5 +1,6 @@
 import type { Schema } from './typings';
 import 'dotenv/config';
+import { v4 } from 'uuid';
 
 import { createAgent } from '@forestadmin/agent';
 import dynamoose, { model } from 'dynamoose';
@@ -67,6 +68,10 @@ import { createDynamooseDataSource } from './src/datasource-dynamoose';
               return o?.value || 0;
             });
           }
+        })
+        .overrideCreate((context) => {
+          context.data.forEach(d => { d.merchantId = v4() } );
+          return context.collection.create(context.data);
         });
     })
     .customizeCollection('testForestAdmin-merchantOffers', collection => {
